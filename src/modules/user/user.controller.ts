@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDTO } from './DTO/user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path/posix';
+import { AuthGuard } from '../auth/auth.guard';
 
 
 @Controller('user')
@@ -28,21 +29,25 @@ export class UserController {
    }
    
    @Get()
+   @UseGuards(AuthGuard)
    getUsers() {
      return this.userService.getUsers() 
    }
    
    @Get(':id')
+   @UseGuards(AuthGuard)
    getId(@Param('id') id:string) {
       return this.userService.getById(id)
    }
    
    @Delete(':id')
+   @UseGuards(AuthGuard)
    delete(@Param('id') id: string) {
       return this.userService.delete(id) 
    }
    
    @Put(':id')
+   @UseGuards(AuthGuard)
    @UseInterceptors(FileInterceptor('file',{
       storage: diskStorage({
         destination: './files',

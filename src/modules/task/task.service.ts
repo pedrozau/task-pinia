@@ -81,6 +81,10 @@ export class TaskService {
        })
            
     }
+
+    async getTasks() {
+        return await this.prisma.task.findMany()
+    }
     
 
 }
